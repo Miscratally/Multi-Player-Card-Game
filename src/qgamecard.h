@@ -1,40 +1,45 @@
 ﻿#ifndef QGAMECARD_H
 #define QGAMECARD_H
+
 #include <QString>
-enum EnumSuit
+
+// Enumeration for different card suits.
+enum class EnumSuit
 {
-    kSpade =0,
-    kHeart =1,
-    kDiamond =2,
-    kClub =3,
+    Spade = 0,
+    Heart = 1,
+    Diamond = 2,
+    Club = 3,
 };
 
 class QGameCard
 {
 public:
+    // Default constructor.
     QGameCard();
-    QGameCard(int number,EnumSuit suit);
+
+    // Constructor to initialize the card with the given number and suit.
+    QGameCard(int number, EnumSuit suit);
+
+    // Returns a string representation of the card.
     QString cardString() const;
 
-    // 1 = big  0 = euqal -1 = small
-    int compare(QGameCard* other) const{
-        if(m_number > other->m_number)
-            return 1;
+    // Compares this card with another card.
+    // Returns:
+    //   1 if this card is greater than the other card.
+    //   0 if this card is equal to the other card.
+    //  -1 if this card is smaller than the other card.
+    int compare(QGameCard* other) const;
 
-        if(m_number ==other->m_number)
-        {
-            if(m_suit < other->m_suit)
-                return 1;
+    // Returns the number of the card.
+    int number() const;
 
-            if(m_suit==other->m_suit)
-                return 0;
-        }
+    // Returns the suit of the card.
+    EnumSuit suit() const;
 
-        return -1;
-    }
-public:
-    int m_number;        //card number Aces are valued at 1, Jacks at 11, Queens at 12, and Kings at 13.
-    EnumSuit m_suit;          //Suit hierarchy is Spades > Hearts > Diamonds > Clubs.
+private:
+    int m_number; // Card number. Aces are valued at 1, Jacks at 11, Queens at 12, and Kings at 13.
+    EnumSuit m_suit; // Suit hierarchy is Spades > Hearts > Diamonds > Clubs.
 };
 
 #endif // QGAMECARD_H

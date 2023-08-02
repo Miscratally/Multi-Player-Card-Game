@@ -209,7 +209,7 @@ void MainWindow::endGame()
 void MainWindow::slot_showWinner()
 {
     QGamePlayer* winnerPlayer = m_gameLogic->getWinner();
-    m_labelWinner->setText(winnerPlayer->m_name);
+    m_labelWinner->setText(winnerPlayer->name());
     m_labelWinner->setVisible(true);
     m_labelWinnerText->setVisible(true);
     endGame();
@@ -337,8 +337,8 @@ void QPlayerWidget::setPlayerInfo(const QGamePlayer *gamePlayer)
     }
 
     m_gamePlayer = gamePlayer;
-    m_labelName->setText(gamePlayer->m_name);
-    QString qss = QString("QLabel {border-image: url(:%1);}").arg(gamePlayer->m_avator);
+    m_labelName->setText(gamePlayer->name());
+    QString qss = QString("QLabel {border-image: url(:%1);}").arg(gamePlayer->avator());
     m_labelAvator->setStyleSheet(qss);
 
     m_pushbtnAddOrRemove->setText("Remove Player");

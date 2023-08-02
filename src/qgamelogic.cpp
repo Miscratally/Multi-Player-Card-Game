@@ -99,7 +99,7 @@ void QGameLogic::startOneRound()
     {
         if(m_vectorPlayer[i])
         {
-            m_vectorPlayer[i]->m_gameCard = nullptr;
+            m_vectorPlayer[i]->setGameCard(nullptr);
         }
     }
 
@@ -144,7 +144,7 @@ QGamePlayer *QGameLogic::findPlayerByName(const QString &name)
     {
         if(m_vectorPlayer[i])
         {
-            if(m_vectorPlayer[i]->m_name==name)
+            if(name == m_vectorPlayer[i]->name())
                 return m_vectorPlayer[i];
         }
     }
@@ -181,8 +181,8 @@ QGameCard *QGameLogic::playerDrawCard(int idx)
     if(gamePlayer==nullptr)
         return nullptr;
 
-    if(gamePlayer->m_gameCard)
-        return gamePlayer->m_gameCard;
+    if(gamePlayer->gameCard())
+        return gamePlayer->gameCard();
 
     int cardCnt = m_listCardIdx.length();
     if(cardCnt ==0)
@@ -191,7 +191,7 @@ QGameCard *QGameLogic::playerDrawCard(int idx)
     QGameCard* gameCard = m_listGameCard.at(m_listCardIdx.at(0));
     m_listCardIdx.removeAt(0);
 
-    gamePlayer->setCard(gameCard);
+    gamePlayer->setGameCard(gameCard);
 
     //if all player draw card
     int playerCnt = 0;
@@ -201,7 +201,7 @@ QGameCard *QGameLogic::playerDrawCard(int idx)
         if(m_vectorPlayer[i])
         {
             playerCnt++;
-            if(m_vectorPlayer[i]->m_gameCard)
+            if(m_vectorPlayer[i]->gameCard())
             {
                 playerCardCnt++;
             }
@@ -226,7 +226,7 @@ void QGameLogic::calcWinner()
 
     for(int i = 0;i<m_vectorPlayer.length();i++)
     {
-        if(m_vectorPlayer[i]&&m_vectorPlayer[i]->m_gameCard)
+        if(m_vectorPlayer[i] && m_vectorPlayer[i]->gameCard())
         {
             if(winnerPlayer==nullptr)
             {
@@ -235,10 +235,10 @@ void QGameLogic::calcWinner()
             else
             {
                 QGamePlayer* tmpPlayer = m_vectorPlayer[i];
-                if(tmpPlayer&&tmpPlayer->m_gameCard)
+                if(tmpPlayer && tmpPlayer->gameCard())
                 {
                     //calc win
-                    if(winnerPlayer->m_gameCard->compare(tmpPlayer->m_gameCard)<0)
+                    if(winnerPlayer->gameCard()->compare(tmpPlayer->gameCard()) < 0)
                     {
                         winnerPlayer = tmpPlayer;
                     }
