@@ -104,56 +104,82 @@ bool QGameLogic::initGame(int playerCount)
 
 void QGameLogic::startOneRound()
 {
-    if(getCardCnt()==0)
-        randomGameCards();
-
-    //clear player cards
-    for(int i =0;i<g_maxPlayerCnt;i++)
+    // If the deck is empty, initialize it with random game cards.
+    if (getCardCnt() == 0)
     {
-        if(m_vectorPlayer[i])
+        randomGameCards();
+    }
+
+    // Clear player cards.
+    for (auto& player : m_vectorPlayer)
+    {
+        // If m_vectorPlayer contains nullptrs, add a check here to avoid dereferencing null pointers.
+        if (player)
         {
-            m_vectorPlayer[i]->setGameCard(nullptr);
+            player->setGameCard(nullptr);
         }
     }
 
-    m_timeCountDown = 14;
+    // Reset the time countdown to 15 seconds for this round.
+    m_timeCountDown = g_timeCountDown;
 }
 
-QGamePlayer *QGameLogic::addPlayer(int idx)
+
+// Add a new player to the game.
+QGamePlayer* QGameLogic::addPlayer(int idx)
 {
-    if(idx<0||idx>=g_maxPlayerCnt)
+    // Check if the index is valid (within the range of players).
+    if (idx < 0 || idx >= g_maxPlayerCnt)
         return nullptr;
 
-    if(m_vectorPlayer[idx] !=nullptr)
+    // Check if the player slot is already occupied.
+    if (m_vectorPlayer[idx] != nullptr)
         return nullptr;
 
+    // Generate a random name for the player.
     QString name = getRandName();
-    while(findPlayerByName(name)!=nullptr)
+
+    // Make sure the generated name is unique among all players.
+    while (findPlayerByName(name) != nullptr)
     {
         name = getRandName();
     }
 
-    QGamePlayer* player = new QGamePlayer(name,getRandAvator());
-    m_vectorPlayer[idx] =player;
+    // TODO: Will use same avator for different user.
+    QString avatar = getRandAvator();
+
+    // Create a new QGamePlayer instance with the generated name and avatar.
+    QGamePlayer* player = new QGamePlayer(name, avatar);
+
+    // Assign the player to the corresponding slot in the player vector.
+    m_vectorPlayer[idx] = player;
 
     return player;
 }
 
+
+// Remove a player from the vector by index.
 void QGameLogic::removePlayer(int idx)
 {
-    delete m_vectorPlayer[idx];
-    m_vectorPlayer[idx] = nullptr;
+    if (m_vectorPlayer[idx] != nullptr)
+    {
+        delete m_vectorPlayer[idx];
+        m_vectorPlayer[idx] = nullptr;
+    }
 }
 
 void QGameLogic::removePlayer(QGamePlayer *player)
 {
-    if(m_vectorPlayer.removeOne(player))
+    // Attempt to remove the player from the vector.
+    if (m_vectorPlayer.removeOne(player))
+    {
         delete player;
+    }
 }
 
 QGamePlayer *QGameLogic::findPlayerByName(const QString &name)
 {
-    for(int i = 0;i<m_vectorPlayer.length();i++)
+    for(int i = 0; i < m_vectorPlayer.length(); i++)
     {
         if(m_vectorPlayer[i])
         {
@@ -164,67 +190,85 @@ QGamePlayer *QGameLogic::findPlayerByName(const QString &name)
     return nullptr;
 }
 
-QVector<QGamePlayer *> QGameLogic::getAllPlayers()
+
+QVector<QGamePlayer*> QGameLogic::getAllPlayers()
 {
     return m_vectorPlayer;
 }
 
+// Shuffle the cards
 void QGameLogic::randomGameCards()
 {
-    for(int i =0;i<52;i++)
+    int total_cards = g_numSuit * g_numCard;
+
+    for(int i = 0; i < total_cards; i++)
         m_listCardIdx.append(i);
 
-    for(int i = 52-1; i>0; i--)
+    for(int i = total_cards - 1; i > 0; i--)
     {
-        int j = rand() % (i+1);
+        int j = rand() % (i + 1);
 
         int temp = m_listCardIdx[i];
         m_listCardIdx[i] = m_listCardIdx[j];
         m_listCardIdx[j] = temp;
     }
-
 }
+
 
 QGameCard *QGameLogic::playerDrawCard(int idx)
 {
-    if(idx<0||idx>=g_maxPlayerCnt)
+    // Check if the index is out of range.
+    if (idx < 0 || idx >= g_maxPlayerCnt)
         return nullptr;
 
-    QGamePlayer*  gamePlayer = m_vectorPlayer[idx];
-    if(gamePlayer==nullptr)
+    // Get the player at the specified index.
+    QGamePlayer* gamePlayer = m_vectorPlayer[idx];
+
+    // If the player does not exist, return nullptr.
+    if (gamePlayer == nullptr)
         return nullptr;
 
-    if(gamePlayer->gameCard())
+    // If the player already has a card, return the existing card.
+    if (gamePlayer->gameCard())
         return gamePlayer->gameCard();
 
+    // Check if there are any cards left in the deck.
     int cardCnt = m_listCardIdx.length();
-    if(cardCnt ==0)
+    if (cardCnt == 0)
         return nullptr;
 
+    // Get the top card from the deck.
     QGameCard* gameCard = m_listGameCard.at(m_listCardIdx.at(0));
     m_listCardIdx.removeAt(0);
 
+    // Assign the drawn card to the player.
     gamePlayer->setGameCard(gameCard);
 
-    //if all player draw card
+    // Check if all players have drawn a card.
     int playerCnt = 0;
     int playerCardCnt = 0;
-    for(int i = 0;i<m_vectorPlayer.length();i++)
+    for (int i = 0; i < m_vectorPlayer.length(); i++)
     {
-        if(m_vectorPlayer[i])
+        if (m_vectorPlayer[i])
         {
             playerCnt++;
-            if(m_vectorPlayer[i]->gameCard())
+            if (m_vectorPlayer[i]->gameCard())
             {
                 playerCardCnt++;
             }
         }
     }
-    qDebug() <<"playerCnt="<<playerCnt<<",playerCardCnt="<<playerCardCnt;
-    if(playerCnt !=0 && playerCnt==playerCardCnt)
+
+    // Output the number of players and the number of players who have drawn a card.
+    qDebug() << "playerCnt =" << playerCnt << ",playerCardCnt =" << playerCardCnt;
+
+    // If all players have drawn a card, calculate the winner.
+    if (playerCnt != 0 && playerCnt == playerCardCnt)
     {
         calcWinner();
     }
+
+    // Return the drawn card.
     return gameCard;
 }
 
@@ -233,25 +277,30 @@ int QGameLogic::getCardCnt()
     return m_listCardIdx.length();
 }
 
+// Calculates the winner player based on the game cards held by each player.
 void QGameLogic::calcWinner()
 {
     QGamePlayer* winnerPlayer = nullptr;
 
-    for(int i = 0;i<m_vectorPlayer.length();i++)
+    for (int i = 0; i < m_vectorPlayer.length(); i++)
     {
-        if(m_vectorPlayer[i] && m_vectorPlayer[i]->gameCard())
+        // Check if the player exists and has a valid game card.
+        if (m_vectorPlayer[i] && m_vectorPlayer[i]->gameCard())
         {
-            if(winnerPlayer==nullptr)
+            if (winnerPlayer == nullptr)
             {
+                // The first player with a valid game card is considered the winner (temporarily).
                 winnerPlayer = m_vectorPlayer[i];
             }
             else
             {
                 QGamePlayer* tmpPlayer = m_vectorPlayer[i];
-                if(tmpPlayer && tmpPlayer->gameCard())
+
+                // Check if the temporary player exists and has a valid game card.
+                if (tmpPlayer && tmpPlayer->gameCard())
                 {
-                    //calc win
-                    if(winnerPlayer->gameCard()->compare(tmpPlayer->gameCard()) < 0)
+                    // Compare the game cards to determine the winner.
+                    if (winnerPlayer->gameCard()->compare(tmpPlayer->gameCard()) < 0)
                     {
                         winnerPlayer = tmpPlayer;
                     }
@@ -261,8 +310,9 @@ void QGameLogic::calcWinner()
     }
 
     m_winnerPlayer = winnerPlayer;
+
+    // Emit a signal to notify any connected slots that the winner is determined.
     emit sig_showWinner();
-    //m_mainUi->showWinner(m_winnerPlayer);
 }
 
 QGamePlayer *QGameLogic::getWinner()
@@ -275,17 +325,23 @@ int QGameLogic::getTimeCountDown()
     return m_timeCountDown;
 }
 
+// This function is called when a timer times out. It is intended to handle game logic related to time countdown.
 void QGameLogic::slot_onTimeout()
 {
-    if(m_timeCountDown)
+    // If the time countdown is active (greater than 0), emit the signal to notify the UI about the countdown.
+    // The UI can then update the displayed countdown timer, if necessary.
+    if (m_timeCountDown)
     {
         emit sig_timeCountDown();
-        //m_mainUi->showTimeCountDown(m_timeCountDown);
     }
 
+    // Decrement the time countdown.
     m_timeCountDown--;
-    if(m_timeCountDown<=0)
+
+    // If the time countdown has reached zero or less, it's time to calculate the winner of the game.
+    if (m_timeCountDown <= 0)
     {
         calcWinner();
     }
 }
+
