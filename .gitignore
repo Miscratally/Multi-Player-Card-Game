@@ -437,3 +437,6 @@ build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/.qtc_clangd/.cache/clangd/i
 build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/.qtc_clangd/.cache/clangd/index/_mingw.h.9063BC30453243F3.idx
 build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/.qtc_clangd/.cache/clangd/index/__stddef_max_align_t.h.73686C4C901DE5A3.idx
 build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/.qmake.stash
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/.qtc_clangd/.cache/clangd/index/qplayerwidget.cpp.7694ABC6D3ADDD0E.idx
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/.qtc_clangd/.cache/clangd/index/qplayerwidget.h.AE910D896221F54D.idx
+*.idx
