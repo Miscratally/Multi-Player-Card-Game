@@ -40,7 +40,7 @@ public slots:
     void slot_showTimeCountDown();
     void slot_onPushbtnStartOnRoundClicked();
     void slot_onPlayerWidget_playerAddOrRemove(int idx);
-    void slog_onPlayerWidget_playerDrawCard(int idx);
+    void slot_onPlayerWidget_playerDrawCard(int idx);
 
 protected:
     QPointer<QPushButton>  m_pushBtnStartOneRound;
@@ -61,29 +61,45 @@ protected:
 #endif // MAINWINDOW_H
 
 
-class QPlayerWidget: public QWidget
+class QPlayerWidget : public QWidget
 {
     Q_OBJECT
 public:
-    QPlayerWidget(int idx);
+    // Constructor - Takes the player index as input.
+    explicit QPlayerWidget(int idx);
+
+    // Initializes the widgets and layout for the player.
     void initWidget();
+
     void setPlayerInfo(const QGamePlayer* gamePlayer);
+
     void setCardInfo(const QGameCard* gameCard);
+
 signals:
+    // Signal emitted when the player add or remove button is clicked.
     void sig_onPlayerAddOrRemove(int idx);
+
+    // Signal emitted when the player draw card button is clicked.
     void sig_onPlayerDrawCard(int idx);
 
 public slots:
+    // Slot to handle the add or remove button click.
     void slot_onAddOrRemovePushBtnClicked();
+
+    // Slot to handle the draw card button click.
     void slot_onDrawCardPushBtnClicked();
+
 public:
-    int m_idx;
-    QPointer<QLabel> m_labelCardNumSuit;        //card num suit
-    QPointer<QPushButton> m_pushbtnDrawCard;    //draw card
-    QPointer<QLabel> m_labelName;               //player Name
-    QPointer<QLabel> m_labelAvator;             //player avator
-    QPointer<QPushButton> m_pushbtnAddOrRemove;
-    const QGamePlayer* m_gamePlayer;
+    int m_idx;  // Player index.
+
+    // Widgets for player information display.
+    QPointer<QLabel> m_labelCardNumSuit;   // Card number and suit.
+    QPointer<QPushButton> m_pushBtnDrawCard;   // Draw card button.
+    QPointer<QLabel> m_labelName;   // Player name.
+    QPointer<QLabel> m_labelAvator;   // Player avatar.
+    QPointer<QPushButton> m_pushBtnAddOrRemove;   // Add or remove player button.
+
+    const QGamePlayer* m_gamePlayer;   // Pointer to the game player information.
 };
 
 class QInputDlg : public QDialog
@@ -124,7 +140,7 @@ public:
             hbox->addWidget(m_pushBtnStart);
 
             // Connecting the Start button's clicked signal to the accept slot of the dialog
-            connect(m_pushBtnStart, &QPushButton::clicked, this, &QInputDlg::onOkClicked);
+            connect(m_pushBtnStart, &QPushButton::clicked, this, &QInputDlg::onStartClicked);
         }
 
         // Set the dialog's size and style sheet for better appearance
@@ -139,7 +155,7 @@ public:
 
 private slots:
     // Slot to handle the OK button click
-    void onOkClicked()
+    void onStartClicked()
     {
         // Validate user input and accept the dialog if valid
         int num = m_lineEditNum->text().toInt();

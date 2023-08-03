@@ -14,6 +14,8 @@ namespace GameConstants {
     constexpr int SomePlayerAvatorCount = 8;
     constexpr int SomePlayerNameCount = 10;
 
+    constexpr int AvatorSize = 100;
+
     // Card related constants
     constexpr int NumberOfSuits = 4;
     constexpr int NumberOfCards = 13;

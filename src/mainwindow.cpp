@@ -159,7 +159,7 @@ void MainWindow::initWidget()
                                  this,&MainWindow::slot_onPlayerWidget_playerAddOrRemove);
 
                 QObject::connect(playerWidget,&QPlayerWidget::sig_onPlayerDrawCard,
-                                 this,&MainWindow::slog_onPlayerWidget_playerDrawCard);
+                                 this,&MainWindow::slot_onPlayerWidget_playerDrawCard);
             }
         }
         {
@@ -264,7 +264,7 @@ void MainWindow::slot_onPlayerWidget_playerAddOrRemove(int idx)
     }
 }
 
-void MainWindow::slog_onPlayerWidget_playerDrawCard(int idx)
+void MainWindow::slot_onPlayerWidget_playerDrawCard(int idx)
 {
     if(idx >=m_listPlayerWidget.length()||idx<0)
         return;
@@ -286,41 +286,50 @@ void MainWindow::slog_onPlayerWidget_playerDrawCard(int idx)
 }
 
 QPlayerWidget::QPlayerWidget(int idx)
-    :m_idx(idx)
-    ,m_gamePlayer(nullptr)
+    : m_idx(idx)
+    , m_gamePlayer(nullptr)
 {
     initWidget();
 
-    QObject::connect(this->m_pushbtnDrawCard,&QPushButton::clicked,this,&QPlayerWidget::slot_onDrawCardPushBtnClicked);
-    QObject::connect(this->m_pushbtnAddOrRemove,&QPushButton::clicked,this,&QPlayerWidget::slot_onAddOrRemovePushBtnClicked);
+    // Connect the clicked signal of m_pushBtnDrawCard to slot_onDrawCardPushBtnClicked
+    QObject::connect(this->m_pushBtnDrawCard, &QPushButton::clicked, this, &QPlayerWidget::slot_onDrawCardPushBtnClicked);
+
+    // Connect the clicked signal of m_pushBtnAddOrRemove to slot_onAddOrRemovePushBtnClicked
+    QObject::connect(this->m_pushBtnAddOrRemove, &QPushButton::clicked, this, &QPlayerWidget::slot_onAddOrRemovePushBtnClicked);
 }
 
 void QPlayerWidget::initWidget()
 {
+    // Create the main layout for the widget
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
 
+    // Label to display the card number and suit
     m_labelCardNumSuit = new QLabel("");
     m_labelCardNumSuit->setStyleSheet("QLabel {font: 25pt \"Arial\";}");
-    mainLayout->addWidget(m_labelCardNumSuit,0,Qt::AlignHCenter);
+    mainLayout->addWidget(m_labelCardNumSuit, 0, Qt::AlignHCenter);
 
-    m_pushbtnDrawCard = new QPushButton("Draw");
-    m_pushbtnDrawCard->setStyleSheet("QPushButton {font: 15pt \"Arial\";}");
-    mainLayout->addWidget(m_pushbtnDrawCard,0,Qt::AlignHCenter);
+    // Button to draw a card
+    m_pushBtnDrawCard = new QPushButton("Draw");
+    m_pushBtnDrawCard->setStyleSheet("QPushButton {font: 15pt \"Arial\";}");
+    mainLayout->addWidget(m_pushBtnDrawCard, 0, Qt::AlignHCenter);
 
+    // Label to display the player's name
     m_labelName = new QLabel("Name");
     m_labelName->setStyleSheet("QLabel {font: 15pt \"Arial\";}");
-    mainLayout->addWidget(m_labelName,0,Qt::AlignHCenter);
+    mainLayout->addWidget(m_labelName, 0, Qt::AlignHCenter);
 
+    // Label to display the player's avatar (image)
     m_labelAvator = new QLabel("");
     m_labelAvator->setStyleSheet("QLabel {border-image: url(:/avator/avator/def_head.png);}");
-    m_labelAvator->setFixedSize(QSize(100,100));
-    mainLayout->addWidget(m_labelAvator,0,Qt::AlignHCenter);
+    m_labelAvator->setFixedSize(QSize(GameConstants::AvatorSize, GameConstants::AvatorSize));
+    mainLayout->addWidget(m_labelAvator, 0, Qt::AlignHCenter);
 
-    m_pushbtnAddOrRemove = new QPushButton("Add Player");
-    m_pushbtnAddOrRemove->setStyleSheet("QPushButton {font: 15pt \"Arial\";}");
-    mainLayout->addWidget(m_pushbtnAddOrRemove,0,Qt::AlignHCenter);
-
+    // Button to add or remove the player
+    m_pushBtnAddOrRemove = new QPushButton("Add Player");
+    m_pushBtnAddOrRemove->setStyleSheet("QPushButton {font: 15pt \"Arial\";}");
+    mainLayout->addWidget(m_pushBtnAddOrRemove, 0, Qt::AlignHCenter);
 }
+
 
 void QPlayerWidget::setPlayerInfo(const QGamePlayer *gamePlayer)
 {
@@ -329,7 +338,7 @@ void QPlayerWidget::setPlayerInfo(const QGamePlayer *gamePlayer)
         m_gamePlayer = nullptr;
         m_labelName->setText("Name");
         m_labelAvator->setStyleSheet("QLabel {border-image: url(:/avator/avator/def_head.png);}");
-        m_pushbtnAddOrRemove->setText("Add Player");
+        m_pushBtnAddOrRemove->setText("Add Player");
 
         m_labelCardNumSuit->setText("");
         return;
@@ -340,7 +349,7 @@ void QPlayerWidget::setPlayerInfo(const QGamePlayer *gamePlayer)
     QString qss = QString("QLabel {border-image: url(:%1);}").arg(gamePlayer->avator());
     m_labelAvator->setStyleSheet(qss);
 
-    m_pushbtnAddOrRemove->setText("Remove Player");
+    m_pushBtnAddOrRemove->setText("Remove Player");
 }
 
 void QPlayerWidget::setCardInfo(const QGameCard *gameCard)
