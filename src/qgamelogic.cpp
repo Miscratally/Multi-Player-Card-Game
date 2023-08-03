@@ -1,88 +1,101 @@
-﻿#include "qgamelogic.h"
-#include "mainwindow.h"
-#include <QDebug>
-
-
-const QString  g_somePlayerName[10]={
-    {"Alice"},              //0
-    {"Box"},
-    {"Car"},
-    {"Paul"},
-    {"John"},
-    {"Jusin"},
-    {"Messi"},
-    {"Mask"},
-    {"Frank"},
-    {"God"},                //9
-};
-
-const int g_somePlayerNameCnt = 10;
-
-const QString  g_somePlayerAvator[9]={
-    {"/avator/avator/Anivia_Square_0.png"},        //0
-    {"/avator/avator/Annie_square_0.png"},
-    {"/avator/avator/Vayne_Square_0.png"},
-    {"/avator/avator/Renekton_Square_0.png"},
-    {"/avator/avator/MissFortune_square_0.png"},
-    {"/avator/avator/Jinx_Square_0.png"},
-    {"/avator/avator/Galio_square_0.png"},
-    {"/avator/avator/Ashe_square_0.png"},         //7
-};
-
-const int g_somePlayerAvatorCnt = 8;
+﻿#include <QDebug>
 #include <time.h>
+#include <vector>
+#include <QString>
+#include "qgamelogic.h"
+#include "mainwindow.h"
+
+const QString g_somePlayerName[] = {
+    QStringLiteral("Alice"),
+    QStringLiteral("Box"),
+    QStringLiteral("Car"),
+    QStringLiteral("Paul"),
+    QStringLiteral("John"),
+    QStringLiteral("Jusin"),
+    QStringLiteral("Messi"),
+    QStringLiteral("Mask"),
+    QStringLiteral("Frank"),
+    QStringLiteral("God"),
+};
+
+const QString g_somePlayerAvator[] = {
+    QStringLiteral("/avator/avator/Anivia_Square_0.png"),
+    QStringLiteral("/avator/avator/Annie_square_0.png"),
+    QStringLiteral("/avator/avator/Vayne_Square_0.png"),
+    QStringLiteral("/avator/avator/Renekton_Square_0.png"),
+    QStringLiteral("/avator/avator/MissFortune_square_0.png"),
+    QStringLiteral("/avator/avator/Jinx_Square_0.png"),
+    QStringLiteral("/avator/avator/Galio_square_0.png"),
+    QStringLiteral("/avator/avator/Ashe_square_0.png"),
+};
+
+// Constructor
+QGameLogic::QGameLogic(MainWindow* mainUi)
+    : m_mainUi(mainUi)
+{
+    // Initialize the player vector
+    m_vectorPlayer.resize(g_maxPlayerCnt);
+    for (int i = 0; i < g_maxPlayerCnt; i++)
+        m_vectorPlayer[i] = nullptr;
+}
+
+// Return the randomly selected name.
 QString getRandName()
 {
-    srand(time(NULL));
-    int idx =rand()%g_somePlayerNameCnt;
+    static bool seeded = false; // Use static variable to ensure srand is called only once.
+    if (!seeded) {
+        srand(time(NULL));
+        seeded = true;
+    }
+    int idx = rand() % g_somePlayerNameCnt; // Generate a random index within the range of g_somePlayerNameCnt.
 
     return g_somePlayerName[idx];
 }
 
+// Return the randomly selected avatar.
 QString getRandAvator()
 {
-    srand(time(NULL));
-    int idx =rand()%g_somePlayerAvatorCnt;
+    static bool seeded = false;
+    if (!seeded) {
+        srand(time(NULL));
+        seeded = true;
+    }
+    int idx = rand() % g_somePlayerAvatorCnt; // Generate a random index within the range of g_somePlayerAvatorCnt.
 
     return g_somePlayerAvator[idx];
 }
 
-QGameLogic::QGameLogic(MainWindow* mainUi)
-    :m_mainUi(mainUi)
-{
-    //resize
-    m_vectorPlayer.resize(g_maxPlayerCnt);
-    for(int i = 0;i<g_maxPlayerCnt;i++)
-        m_vectorPlayer[i] = nullptr;
-}
-
 bool QGameLogic::initGame(int playerCount)
 {
-    if(playerCount >g_maxPlayerCnt)
+    // Check if the player count within the range.
+    if (playerCount < g_minPlayerCnt || playerCount > g_maxPlayerCnt )
     {
         return false;
     }
 
-    for(int i =0;i<playerCount;i++)
+    for(int i =0;i < playerCount; i++)
     {
         QString name = getRandName();
+
+        // Make sure the generated name is unique among players.
         while(findPlayerByName(name)!=nullptr)
         {
             name = getRandName();
         }
 
+        // TODO: Will use same Avator!
         QGamePlayer* player = new QGamePlayer(name,getRandAvator());
         m_vectorPlayer[i] = player;
     }
 
 
-    //init gamecard
-    for(int i = 0;i<4;i++)
+    // Initialize all 52 cards.
+    for (int suit = 0; suit < g_numSuit; suit++)
     {
-        for(int j = 0;j<13;j++)
+        for (int number = 0; number < g_numCard; number++)
         {
-            QGameCard* gameCard = new QGameCard(j,(EnumSuit)i);//number,suit
-            m_listGameCard.append(gameCard);
+            QGameCard* gameCard = new QGameCard(number, static_cast<EnumSuit>(suit));
+            m_listGameCard.append(gameCard); // Add the card to the list of game cards.
         }
     }
 
@@ -163,11 +176,11 @@ void QGameLogic::randomGameCards()
 
     for(int i = 52-1; i>0; i--)
     {
-       int j = rand() % (i+1);
+        int j = rand() % (i+1);
 
-       int temp = m_listCardIdx[i];
-       m_listCardIdx[i] = m_listCardIdx[j];
-       m_listCardIdx[j] = temp;
+        int temp = m_listCardIdx[i];
+        m_listCardIdx[i] = m_listCardIdx[j];
+        m_listCardIdx[j] = temp;
     }
 
 }
