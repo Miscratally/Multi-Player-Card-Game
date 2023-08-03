@@ -1,18 +1,12 @@
 ﻿#ifndef QGAMELOGIC_H
 #define QGAMELOGIC_H
 
-#include "qgameplayer.h"
-#include "qgamecard.h"
 #include <QVector>
 #include <QTimer>
 
-const int g_maxPlayerCnt = 5;
-const int g_minPlayerCnt = 2;
-const int g_numSuit = 4;
-const int g_numCard = 13;
-const int g_somePlayerNameCnt = 10;
-const int g_somePlayerAvatorCnt = 8;
-const int g_timeCountDown = 15;
+#include "qgameplayer.h"
+#include "qgamecard.h"
+#include "qconstants.h"
 
 // Forward declaration of MainWindow class
 class MainWindow;

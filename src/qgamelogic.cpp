@@ -34,8 +34,8 @@ QGameLogic::QGameLogic(MainWindow* mainUi)
     : m_mainUi(mainUi)
 {
     // Initialize the player vector
-    m_vectorPlayer.resize(g_maxPlayerCnt);
-    for (int i = 0; i < g_maxPlayerCnt; i++)
+    m_vectorPlayer.resize(GameConstants::MaxPlayerCount);
+    for (int i = 0; i < GameConstants::MaxPlayerCount; i++)
         m_vectorPlayer[i] = nullptr;
 }
 
@@ -47,7 +47,7 @@ QString getRandName()
         srand(time(NULL));
         seeded = true;
     }
-    int idx = rand() % g_somePlayerNameCnt; // Generate a random index within the range of g_somePlayerNameCnt.
+    int idx = rand() % GameConstants::SomePlayerNameCount; // Generate a random index within the range of GameConstants::SomePlayerNameCount.
 
     return g_somePlayerName[idx];
 }
@@ -60,7 +60,7 @@ QString getRandAvator()
         srand(time(NULL));
         seeded = true;
     }
-    int idx = rand() % g_somePlayerAvatorCnt; // Generate a random index within the range of g_somePlayerAvatorCnt.
+    int idx = rand() % GameConstants::SomePlayerAvatorCount; // Generate a random index within the range of GameConstants::SomePlayerAvatorCount.
 
     return g_somePlayerAvator[idx];
 }
@@ -68,7 +68,7 @@ QString getRandAvator()
 bool QGameLogic::initGame(int playerCount)
 {
     // Check if the player count within the range.
-    if (playerCount < g_minPlayerCnt || playerCount > g_maxPlayerCnt )
+    if (playerCount < GameConstants::MinPlayerCount || playerCount > GameConstants::MaxPlayerCount)
     {
         return false;
     }
@@ -90,9 +90,9 @@ bool QGameLogic::initGame(int playerCount)
 
 
     // Initialize all 52 cards.
-    for (int suit = 0; suit < g_numSuit; suit++)
+    for (int suit = 0; suit < GameConstants::NumberOfSuits; suit++)
     {
-        for (int number = 0; number < g_numCard; number++)
+        for (int number = 0; number < GameConstants::NumberOfCards; number++)
         {
             QGameCard* gameCard = new QGameCard(number, static_cast<EnumSuit>(suit));
             m_listGameCard.append(gameCard); // Add the card to the list of game cards.
@@ -121,7 +121,7 @@ void QGameLogic::startOneRound()
     }
 
     // Reset the time countdown to 15 seconds for this round.
-    m_timeCountDown = g_timeCountDown;
+    m_timeCountDown = GameConstants::TimeCountDown;
 }
 
 
@@ -129,7 +129,7 @@ void QGameLogic::startOneRound()
 QGamePlayer* QGameLogic::addPlayer(int idx)
 {
     // Check if the index is valid (within the range of players).
-    if (idx < 0 || idx >= g_maxPlayerCnt)
+    if (idx < 0 || idx >= GameConstants::MaxPlayerCount)
         return nullptr;
 
     // Check if the player slot is already occupied.
@@ -199,7 +199,7 @@ QVector<QGamePlayer*> QGameLogic::getAllPlayers()
 // Shuffle the cards
 void QGameLogic::randomGameCards()
 {
-    int total_cards = g_numSuit * g_numCard;
+    int total_cards = GameConstants::NumberOfSuits * GameConstants::NumberOfCards;
 
     for(int i = 0; i < total_cards; i++)
         m_listCardIdx.append(i);
@@ -218,7 +218,7 @@ void QGameLogic::randomGameCards()
 QGameCard *QGameLogic::playerDrawCard(int idx)
 {
     // Check if the index is out of range.
-    if (idx < 0 || idx >= g_maxPlayerCnt)
+    if (idx < 0 || idx >= GameConstants::MaxPlayerCount)
         return nullptr;
 
     // Get the player at the specified index.

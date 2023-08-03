@@ -18,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
+    qconstants.h \
     qgamecard.h \
     qgamelogic.h \
     qgameplayer.h

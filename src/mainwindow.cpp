@@ -50,10 +50,10 @@ void MainWindow::initWidget()
             QVBoxLayout* vbox = new QVBoxLayout();
             hbox->addLayout(vbox);
             {
-                m_pushbtnStartOneRound = new QPushButton(u8"Start One Round");
-                m_pushbtnStartOneRound->setStyleSheet("QPushButton {font: 20pt \"Arial\";}");
-                vbox->addWidget(m_pushbtnStartOneRound,Qt::AlignHCenter);
-                QObject::connect(m_pushbtnStartOneRound,&QPushButton::clicked,this,&MainWindow::slot_onPushbtnStartOnRoundClicked);
+                m_pushBtnStartOneRound = new QPushButton(u8"Start One Round");
+                m_pushBtnStartOneRound->setStyleSheet("QPushButton {font: 20pt \"Arial\";}");
+                vbox->addWidget(m_pushBtnStartOneRound,Qt::AlignHCenter);
+                QObject::connect(m_pushBtnStartOneRound,&QPushButton::clicked,this,&MainWindow::slot_onPushbtnStartOnRoundClicked);
             }
             {
                 QHBoxLayout* h = new QHBoxLayout();
@@ -147,7 +147,7 @@ void MainWindow::initWidget()
         {
             m_layoutAllPlayer = new QHBoxLayout();
             hbox->addLayout(m_layoutAllPlayer,1);
-            for(int i =0;i<g_maxPlayerCnt;i++)
+            for(int i =0;i<GameConstants::MaxPlayerCount;i++)
             {
                 QPlayerWidget* playerWidget =new QPlayerWidget(i);
 
@@ -180,7 +180,7 @@ void MainWindow::initGame()
     QInputDlg inputDialog;
     if(inputDialog.exec()==QDialog::Accepted)
     {
-        int num = inputDialog.m_lineeditNum->text().toInt();
+        int num = inputDialog.m_lineEditNum->text().toInt();
         if(num >=2&&num<=5)
             playerCnt = num;
     }
@@ -285,10 +285,9 @@ void MainWindow::slog_onPlayerWidget_playerDrawCard(int idx)
     m_labelRemainCard->setText(QString::number(cardCnt));
 }
 
-
 QPlayerWidget::QPlayerWidget(int idx)
-    :m_gamePlayer(nullptr)
-    ,m_idx(idx)
+    :m_idx(idx)
+    ,m_gamePlayer(nullptr)
 {
     initWidget();
 
@@ -366,3 +365,5 @@ void QPlayerWidget::slot_onDrawCardPushBtnClicked()
 {
     emit sig_onPlayerDrawCard(m_idx);
 }
+
+
