@@ -14,3 +14,9 @@ build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/debug/moc_mainwindow.cpp
 *.o
 *.Debug
 build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Release/release/moc_mainwindow.cpp
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Release/release/moc_qgamelogic.cpp
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Release/Makefile
+*.json
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Release/release/moc_predefs.h
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Release/release/qrc_game.cpp
+build-QtCardGame-Desktop_Qt_6_5_2_MinGW_64_bit-Release/release/QtCardGame.exe
