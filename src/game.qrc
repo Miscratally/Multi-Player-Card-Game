@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/avator">
+	<file>avator/card_game.ico</file>
         <file>avator/def_head.png</file>
         <file>avator/timer.svg</file>
         <file>avator/Avator_0.jpg</file>

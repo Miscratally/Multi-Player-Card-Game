@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
     // Create an instance of the MainWindow class, which represents the main application window
     MainWindow w;
 
+    w.setWindowIcon(QIcon(":avator/avator/card_game.ico"));
+
     //when player close input dialog , then close mainwindow
     if(w.getWillClose())
         return 1;
