@@ -1,16 +1,16 @@
 <RCC>
     <qresource prefix="/avator">
-        <file>avator/Anivia_Square_0.png</file>
-        <file>avator/Annie_square_0.png</file>
-        <file>avator/Ashe_square_0.png</file>
-        <file>avator/FiddleSticks_square_0.png</file>
-        <file>avator/Galio_square_0.png</file>
-        <file>avator/Jinx_Square_0.png</file>
-        <file>avator/MissFortune_square_0.png</file>
-        <file>avator/Olaf_square_0.png</file>
-        <file>avator/Renekton_Square_0.png</file>
-        <file>avator/Vayne_Square_0.png</file>
         <file>avator/def_head.png</file>
         <file>avator/timer.svg</file>
+        <file>avator/Avator_0.jpg</file>
+        <file>avator/Avator_1.jpg</file>
+        <file>avator/Avator_2.jpg</file>
+        <file>avator/Avator_3.jpg</file>
+        <file>avator/Avator_4.jpg</file>
+        <file>avator/Avator_5.jpg</file>
+        <file>avator/Avator_6.jpg</file>
+        <file>avator/Avator_7.jpg</file>
+        <file>avator/Avator_8.jpg</file>
+        <file>avator/Avator_9.jpg</file>
     </qresource>
 </RCC>

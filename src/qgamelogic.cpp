@@ -6,27 +6,29 @@
 #include "mainwindow.h"
 
 const QString g_somePlayerName[] = {
-    QStringLiteral("Alice"),
-    QStringLiteral("Box"),
-    QStringLiteral("Car"),
-    QStringLiteral("Paul"),
-    QStringLiteral("John"),
-    QStringLiteral("Jusin"),
-    QStringLiteral("Messi"),
-    QStringLiteral("Mask"),
-    QStringLiteral("Frank"),
-    QStringLiteral("God"),
+    QStringLiteral("Jarvan IV"),
+    QStringLiteral("Fiora"),
+    QStringLiteral("Vayne"),
+    QStringLiteral("Morgana"),
+    QStringLiteral("Olaf"),
+    QStringLiteral("Lucian"),
+    QStringLiteral("Taric"),
+    QStringLiteral("Katarina"),
+    QStringLiteral("Xayah"),
+    QStringLiteral("Lillia"),
 };
 
 const QString g_somePlayerAvator[] = {
-    QStringLiteral("/avator/avator/Anivia_Square_0.png"),
-    QStringLiteral("/avator/avator/Annie_square_0.png"),
-    QStringLiteral("/avator/avator/Vayne_Square_0.png"),
-    QStringLiteral("/avator/avator/Renekton_Square_0.png"),
-    QStringLiteral("/avator/avator/MissFortune_square_0.png"),
-    QStringLiteral("/avator/avator/Jinx_Square_0.png"),
-    QStringLiteral("/avator/avator/Galio_square_0.png"),
-    QStringLiteral("/avator/avator/Ashe_square_0.png"),
+    QStringLiteral("/avator/avator/Avator_0.jpg"),
+    QStringLiteral("/avator/avator/Avator_1.jpg"),
+    QStringLiteral("/avator/avator/Avator_2.jpg"),
+    QStringLiteral("/avator/avator/Avator_3.jpg"),
+    QStringLiteral("/avator/avator/Avator_4.jpg"),
+    QStringLiteral("/avator/avator/Avator_5.jpg"),
+    QStringLiteral("/avator/avator/Avator_6.jpg"),
+    QStringLiteral("/avator/avator/Avator_7.jpg"),
+    QStringLiteral("/avator/avator/Avator_8.jpg"),
+    QStringLiteral("/avator/avator/Avator_9.jpg"),
 };
 
 // Constructor
@@ -39,30 +41,16 @@ QGameLogic::QGameLogic(MainWindow* mainUi)
         m_vectorPlayer[i] = nullptr;
 }
 
-// Return the randomly selected name.
-QString getRandName()
+int getRandomPlayerId()
 {
     static bool seeded = false; // Use static variable to ensure srand is called only once.
     if (!seeded) {
         srand(time(NULL));
         seeded = true;
     }
-    int idx = rand() % GameConstants::SomePlayerNameCount; // Generate a random index within the range of GameConstants::SomePlayerNameCount.
+    int id = rand() % GameConstants::SomePlayerCount; // Generate a random index within the range of GameConstants::SomePlayerCount.
 
-    return g_somePlayerName[idx];
-}
-
-// Return the randomly selected avatar.
-QString getRandAvator()
-{
-    static bool seeded = false;
-    if (!seeded) {
-        srand(time(NULL));
-        seeded = true;
-    }
-    int idx = rand() % GameConstants::SomePlayerAvatorCount; // Generate a random index within the range of GameConstants::SomePlayerAvatorCount.
-
-    return g_somePlayerAvator[idx];
+    return id;
 }
 
 bool QGameLogic::initGame(int playerCount)
@@ -73,21 +61,22 @@ bool QGameLogic::initGame(int playerCount)
         return false;
     }
 
-    for(int i =0;i < playerCount; i++)
+    for(int i = 0; i < playerCount; i++)
     {
-        QString name = getRandName();
+        int id = getRandomPlayerId();
+        QString name = g_somePlayerName[id];
 
         // Make sure the generated name is unique among players.
         while(findPlayerByName(name)!=nullptr)
         {
-            name = getRandName();
+            id = getRandomPlayerId();
+            name = g_somePlayerName[id];
         }
 
         // TODO: Will use same Avator!
-        QGamePlayer* player = new QGamePlayer(name,getRandAvator());
+        QGamePlayer* player = new QGamePlayer(name, g_somePlayerAvator[id]);
         m_vectorPlayer[i] = player;
     }
-
 
     // Initialize all 52 cards.
     for (int suit = 0; suit < GameConstants::NumberOfSuits; suit++)
@@ -136,17 +125,18 @@ QGamePlayer* QGameLogic::addPlayer(int idx)
     if (m_vectorPlayer[idx] != nullptr)
         return nullptr;
 
-    // Generate a random name for the player.
-    QString name = getRandName();
+    // Generate a random id for the player.
+    int id = getRandomPlayerId();
+    QString name = g_somePlayerName[id];
 
     // Make sure the generated name is unique among all players.
     while (findPlayerByName(name) != nullptr)
     {
-        name = getRandName();
+        id = getRandomPlayerId();
+        name = g_somePlayerName[id];
     }
 
-    // TODO: Will use same avator for different user.
-    QString avatar = getRandAvator();
+    QString avatar = g_somePlayerAvator[id];
 
     // Create a new QGamePlayer instance with the generated name and avatar.
     QGamePlayer* player = new QGamePlayer(name, avatar);

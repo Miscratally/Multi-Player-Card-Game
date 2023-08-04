@@ -13,8 +13,7 @@ namespace GameConstants {
     constexpr int MinPlayerCount = 2;
     constexpr int MaxPlayerCount = 5;
 
-    constexpr int SomePlayerAvatorCount = 8;
-    constexpr int SomePlayerNameCount = 10;
+    constexpr int SomePlayerCount = 10;
 
     constexpr int AvatorSize = 100;
 
