@@ -35,6 +35,9 @@ public:
 
     void initGame();
     void endGame();
+    bool getWillClose();
+    virtual void closeEvent(QCloseEvent *event) override;
+	
 public slots:
     void slot_showWinner();
     void slot_showTimeCountDown();
@@ -43,20 +46,22 @@ public slots:
     void slot_onPlayerWidget_playerDrawCard(int idx);
 
 protected:
-    QPointer<QPushButton>  m_pushBtnStartOneRound;
-    QPointer<QLabel> m_labelRemainCard;         // Remain card
-    QPointer<QLabel> m_labelTimeIcon;           //
-    QPointer<QLabel> m_labelTimeCountDown;      // Time count down
-    QPointer<QLabel> m_labelWinner;             // winner
-    QPointer<QLabel> m_labelWinnerText;             // winner
-    QPointer<QHBoxLayout> m_layoutAllPlayerCard;//all player card
-    QPointer<QHBoxLayout> m_layoutAllPlayer;    //all player
+    QPointer<QPushButton>  m_pushBtnStartOneRound;  // Start One Round Button
+    QPointer<QLabel> m_labelRemainCard;             // Remaining cards
+    QPointer<QLabel> m_labelTimeIcon;               // Timer Icon
+    QPointer<QLabel> m_labelTimeCountDown;          // Time Count Down
+    QPointer<QLabel> m_labelWinner;                 // Winner Name Label
+    QPointer<QLabel> m_labelWinnerText;             // Winner Text Label
+    QPointer<QHBoxLayout> m_layoutAllPlayerCard;    // All Player Cards
+    QPointer<QHBoxLayout> m_layoutAllPlayer;        // All Players
 
     QList<QPointer<QPlayerWidget>> m_listPlayerWidget;
 
     QTimer m_timer;
-    QThread m_threadCalcWinner;             //thread on timmer  calcWinner
+    QThread m_threadCalcWinner;                     // Thread on timmer to calcWinner
     QGameLogic* m_gameLogic;
+    bool m_willClose = false;
+    bool m_gameStarted = false;                     // Status of the game
 };
 #endif // MAINWINDOW_H
 
@@ -111,23 +116,26 @@ public:
     {
         QVBoxLayout* mainLayout = new QVBoxLayout(this);
         setWindowTitle("Multi-Player Card Game"); // Set the window title
-        QFont font;
 
         // Creating the first horizontal layout for the input label and line edit
         {
             QHBoxLayout* hbox = new QHBoxLayout();
             mainLayout->addLayout(hbox);
 
-            // Set font
-            font.setPointSize(10);
-            font.setBold(true);      // 设置字体为粗体
-
             // Set label
             QLabel* label = new QLabel("Number of players:");
-            label->setFont(font);
+            label->setStyleSheet("QLabel {"
+                                 "    font-size: 16px; "
+                                 "    font-family: 'Arial'; "
+                                 "    font-weight: bold; "
+                                 "    background-color: #F0F0F0; "
+                                 "    padding: 2px; "
+                                 "    border-radius: 5px; "
+                                 "}");
 
             hbox->addWidget(label);
 
+            // Set Input text label
             m_lineEditNum->setPlaceholderText("Enter a number between 2 and 5");
             hbox->addWidget(m_lineEditNum);
         }

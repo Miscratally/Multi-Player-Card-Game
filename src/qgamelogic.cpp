@@ -234,8 +234,9 @@ QGameCard *QGameLogic::playerDrawCard(int idx)
 
     // Check if there are any cards left in the deck.
     int cardCnt = m_listCardIdx.length();
+    // TODO: if there are no cards left, return all cards to the deck, and shuffle the deck.
     if (cardCnt == 0)
-        return nullptr;
+        randomGameCards();
 
     // Get the top card from the deck.
     QGameCard* gameCard = m_listGameCard.at(m_listCardIdx.at(0));

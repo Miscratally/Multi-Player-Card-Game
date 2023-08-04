@@ -6,6 +6,8 @@ namespace GameConstants {
     // Window dimensions
     constexpr int WindowWidth = 450;
     constexpr int WindowHeight = 180;
+    constexpr int WidgetWidth = 1280;
+    constexpr int WidgetHeight = 720;
 
     // Player related constants
     constexpr int MinPlayerCount = 2;
@@ -20,8 +22,10 @@ namespace GameConstants {
     constexpr int NumberOfSuits = 4;
     constexpr int NumberOfCards = 13;
 
-    // Time related constant
+    // Timer related constant
     constexpr int TimeCountDown = 15;
+    constexpr int TimerSize = 64;
+    constexpr int TimerInterval = 1000;
 }
 
 #endif
